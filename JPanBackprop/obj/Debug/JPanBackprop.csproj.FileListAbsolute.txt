@@ -1,0 +1,7 @@
+\\GMRDC1\Folder Redirection\Johnny.Pan\Documents\Visual Studio 2017\Projects\JPanBackprop\JPanBackprop\bin\Debug\JPanBackprop.exe.config
+\\GMRDC1\Folder Redirection\Johnny.Pan\Documents\Visual Studio 2017\Projects\JPanBackprop\JPanBackprop\bin\Debug\JPanBackprop.exe
+\\GMRDC1\Folder Redirection\Johnny.Pan\Documents\Visual Studio 2017\Projects\JPanBackprop\JPanBackprop\bin\Debug\JPanBackprop.pdb
+\\GMRDC1\Folder Redirection\Johnny.Pan\Documents\Visual Studio 2017\Projects\JPanBackprop\JPanBackprop\obj\Debug\JPanBackprop.csprojAssemblyReference.cache
+\\GMRDC1\Folder Redirection\Johnny.Pan\Documents\Visual Studio 2017\Projects\JPanBackprop\JPanBackprop\obj\Debug\JPanBackprop.csproj.CoreCompileInputs.cache
+\\GMRDC1\Folder Redirection\Johnny.Pan\Documents\Visual Studio 2017\Projects\JPanBackprop\JPanBackprop\obj\Debug\JPanBackprop.exe
+\\GMRDC1\Folder Redirection\Johnny.Pan\Documents\Visual Studio 2017\Projects\JPanBackprop\JPanBackprop\obj\Debug\JPanBackprop.pdb
