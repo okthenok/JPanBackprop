@@ -14,12 +14,16 @@ namespace JPanBackprop
         public Func<double, double> Activation;
         public double PartialDerivative;
         public double BiasUpdate;
-        public double WeightUpdate;
+        public double PrevBiasUpdate;
+        public double[] WeightUpdates;
+        public double[] PrevWeightUpdates;
 
         public Neuron(Func<double, double> activation, int inputCount)
         {
             Activation = activation;
             Weights = new double[inputCount];
+            WeightUpdates = new double[inputCount];
+            PrevWeightUpdates = new double[inputCount];
         }
 
         public void Randomize(Random rand)
@@ -38,7 +42,7 @@ namespace JPanBackprop
             {
                 Output += input[i] * Weights[i];
             }
-
+            
             Output = Activation(Output + Bias);
 
             return Output;

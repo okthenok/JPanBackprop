@@ -9,6 +9,7 @@ namespace JPanBackprop
     public class Trainer
     {
         Network network;
+        double momentum = 0.1;
         public Trainer(Network net)
         {
             network = net;
@@ -25,7 +26,7 @@ namespace JPanBackprop
                 CalculateUpdates(inputs[i], 0.5);
             }
 
-            
+            ApplyUpdates();
         }
 
         public void ClearUpdates()
@@ -34,8 +35,13 @@ namespace JPanBackprop
             {
                 foreach (Neuron neuron in layer.Neurons)
                 {
-                    neuron.WeightUpdate = 0;
-                    neuron.BiasUpdate = 0;
+                    for (int i = 0; i < neuron.Weights.Length; i++)
+                    {
+                        neuron.WeightUpdates[i] = 0;
+                        neuron.PrevWeightUpdates[i] = 0;
+                        neuron.BiasUpdate = 0;
+                        neuron.PrevBiasUpdate = 0;
+                    }
                 }
             }
         }
@@ -50,11 +56,11 @@ namespace JPanBackprop
                 neuron.PartialDerivative = error * (neuron.Output * (1 - neuron.Output));
             }
 
-            for (int i = outputLayer.Neurons.Length - 2; i >= 0; i--)
+            for (int i = network.Layers.Length - 2; i >= 0; i--)
             {
                 Layer currLayer = network.Layers[i];
                 Layer nextLayer = network.Layers[i + 1];
-                
+
                 for (int j = 0; j < currLayer.Neurons.Length; j++)
                 {
                     Neuron neuron = currLayer.Neurons[j];
@@ -73,15 +79,16 @@ namespace JPanBackprop
         public void CalculateUpdates(double[] input, double learningRate)
         {
             Layer inputLayer = network.Layers[0];
-            foreach (Neuron neuron in inputLayer.Neurons)
+            for (int i = 0; i < inputLayer.Neurons.Length; i++)
             {
-                for (int i = 0; i < input.Length; i++)
+                Neuron neuron = inputLayer.Neurons[i];
+                for (int j = 0; j < input.Length; j++)
                 {
-                    neuron.WeightUpdate = learningRate * neuron.PartialDerivative * input[i];
+                    neuron.WeightUpdates[j] = learningRate * neuron.PartialDerivative * input[j];
                 }
                 neuron.BiasUpdate = learningRate * neuron.PartialDerivative;
             }
-            
+
             for (int i = 1; i < network.Layers.Length; i++)
             {
                 Layer currLayer = network.Layers[i];
@@ -91,7 +98,7 @@ namespace JPanBackprop
                 {
                     for (int j = 0; j < prevLayer.Neurons.Length; j++)
                     {
-                        neuron.WeightUpdate = learningRate * neuron.PartialDerivative * prevLayer.Neurons[j].Output;
+                        neuron.WeightUpdates[j] = learningRate * neuron.PartialDerivative * prevLayer.Neurons[j].Output;
                     }
                     neuron.BiasUpdate = learningRate * neuron.PartialDerivative;
                 }
@@ -104,11 +111,18 @@ namespace JPanBackprop
             {
                 foreach (Neuron neuron in layer.Neurons)
                 {
-                    // add momentum stuff
-                    //wC = WU + (PWU * M)
-                    double weightChange = neuron.WeightUpdate;
+                    for (int i = 0; i < neuron.Weights.Length; i++)
+                    {
+                        double weightChange = neuron.WeightUpdates[i] + (neuron.PrevWeightUpdates[i] * momentum);
+                        neuron.Weights[i] += weightChange;
+                        neuron.PrevWeightUpdates[i] = neuron.WeightUpdates[i];
+                    }
+
+                    double biasChange = neuron.BiasUpdate + (neuron.PrevBiasUpdate * momentum);
+                    neuron.Bias += biasChange;
+                    neuron.PrevBiasUpdate = neuron.BiasUpdate;
                 }
-            }
-        }
+            }   //something wrong in this class with putting same output for literally everything
+        }       //changing everything's weight by the same value
     }
 }
